@@ -1,0 +1,15 @@
+﻿const jwt = require('jsonwebtoken');
+const AppError = require('../utils/AppError');
+const authenticate = (req, res, next) => {
+  try {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) throw new AppError('Authentication required', 401);
+    req.user = jwt.verify(token, process.env.JWT_SECRET);
+    next();
+  } catch (err) {
+    if (err.name === 'TokenExpiredError') return next(new AppError('Token expired', 401));
+    if (err.name === 'JsonWebTokenError') return next(new AppError('Invalid token', 401));
+    next(err);
+  }
+};
+module.exports = authenticate;
