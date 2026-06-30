@@ -1,6 +1,6 @@
-﻿<div align="center">
+<div align="center">
 
-# ðŸ’° Financial Income Tracker
+# 💰 Financial Income Tracker
 
 **Double-Entry Bookkeeping System with Fiscal Period Management & Analytics**
 
@@ -17,120 +17,51 @@ A comprehensive financial income tracking system implementing double-entry bookk
 
 ---
 
-## âœ¨ Features
+## ✨ Features
 
-- ðŸ“’ **Double-Entry Bookkeeping** - Every transaction creates balanced debit/credit entries with PostgreSQL trigger validation
-- ðŸ“… **Fiscal Period Management** - Fiscal years and monthly periods with open/closed/locked states
-- ðŸ’³ **7 Income Categories** - Tuition, Course Sales, Subscriptions, Corporate Training, Workshops, Merchandise, Other
-- ðŸ”„ **Recurring Income** - Automatic handling of subscription-based recurring revenue
-- ðŸ“Š **Analytics Dashboard** - Summary cards, 12-month trend charts, category breakdowns with Chart.js
-- ðŸ” **Audit Trail** - JSONB-based audit log tracking all changes with old/new values
-- ðŸ’± **Monetary Precision** - DECIMAL(15,2) in PostgreSQL + integer arithmetic in JS (no floating-point errors)
-- ðŸ“‘ **Financial Reports** - Income by period, category breakdown, trend analysis
+- 📒 **Double-Entry Bookkeeping** - Every transaction creates balanced debit/credit entries with PostgreSQL trigger validation
+- 📆 **Fiscal Period Management** - Fiscal years and monthly periods with open/closed/locked states
+- 💳 **7 Income Categories** - Tuition, Course Sales, Subscriptions, Corporate Training, Workshops, Merchandise, Other
+- 🔄 **Recurring Income** - Automatic handling of subscription-based recurring revenue
+- 📊 **Analytics Dashboard** - Summary cards, 12-month trend charts, category breakdowns with Chart.js
+- 🔍 **Audit Trail** - JSONB-based audit log tracking all changes with old/new values
+- 💱 **Monetary Precision** - DECIMAL(15,2) in PostgreSQL + integer arithmetic in JS (no floating-point errors)
+- 📈 **Financial Reports** - Income by period, category breakdown, trend analysis
 
-## ðŸ—ï¸ Architecture
-
-```
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”     â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”     â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚   React Frontendâ”‚â”€â”€â”€â”€â–¶â”‚  Express.js API  â”‚â”€â”€â”€â”€â–¶â”‚  PostgreSQL DB  â”‚
-â”‚   (Chart.js)    â”‚     â”‚  (REST + JWT)    â”‚     â”‚  (Double-Entry) â”‚
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜     â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜     â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
-```
-
-## ðŸ“ Project Structure
+## 🏗️ Architecture
 
 ```
-Financial-Income-Tracker/
-â”œâ”€â”€ backend/
-â”‚   â”œâ”€â”€ src/
-â”‚   â”‚   â”œâ”€â”€ app.js                     # Express setup
-â”‚   â”‚   â”œâ”€â”€ config/database.js         # PostgreSQL pool
-â”‚   â”‚   â”œâ”€â”€ controllers/               # Request handlers
-â”‚   â”‚   â”œâ”€â”€ middleware/                 # Auth, error handling
-â”‚   â”‚   â”œâ”€â”€ routes/                    # API routes
-â”‚   â”‚   â”œâ”€â”€ services/                  # Business logic
-â”‚   â”‚   â”œâ”€â”€ utils/moneyUtils.js        # Safe money operations
-â”‚   â”‚   â””â”€â”€ validators/                # Zod schemas
-â”‚   â”œâ”€â”€ migrations/                    # Database schema
-â”‚   â”œâ”€â”€ seeds/                         # Sample data
-â”‚   â”œâ”€â”€ server.js
-â”‚   â””â”€â”€ package.json
-â”œâ”€â”€ frontend/
-â”‚   â”œâ”€â”€ src/
-â”‚   â”‚   â”œâ”€â”€ App.jsx
-â”‚   â”‚   â”œâ”€â”€ components/                # Dashboard, forms, charts
-â”‚   â”‚   â””â”€â”€ services/api.js
-â”‚   â””â”€â”€ package.json
-â””â”€â”€ README.md
+┌───────────────┐     ┌──────────────────┐     ┌──────────────┐
+│ React Frontend│────▶│ Express.js API   │────▶│ PostgreSQL   │
+│ (Chart.js)    │     │ (Double-Entry)   │     │ (5 tables)   │
+└───────────────┘     └──────────────────┘     └──────────────┘
 ```
 
-## ðŸ—„ï¸ Database Schema
+## 📡 API Endpoints
 
-```
-chart_of_accounts â”€â”€â”
-                    â”œâ”€â”€â–¶ transaction_lines â”€â”€â–¶ transactions â”€â”€â–¶ fiscal_periods â”€â”€â–¶ fiscal_years
-income_categories â”€â”€â”˜                              â–²
-       â”‚                                           â”‚
-       â””â”€â”€â–¶ income_records â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
-                                                   
-audit_log (tracks all changes with JSONB snapshots)
-```
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/income` | List income (filter by category, period, date range) |
+| POST | `/api/income` | Record new income |
+| GET | `/api/income/summary` | Category totals & trends |
+| GET | `/api/categories` | Income categories |
+| GET | `/api/fiscal-periods` | Fiscal years & months |
+| POST | `/api/fiscal-periods` | Create fiscal period |
+| GET | `/api/reports/trend` | 12-month trend data |
+| GET | `/api/reports/category-breakdown` | Revenue by category |
 
-## ðŸ› ï¸ Tech Stack
-
-| Technology | Purpose |
-|-----------|---------|
-| Node.js 20 | Runtime |
-| Express.js 4 | API Framework |
-| PostgreSQL 15 | Database with DECIMAL precision |
-| Knex.js | Migrations & query builder |
-| React 18 | Frontend UI |
-| Chart.js 4 | Data visualization |
-| JWT | Authentication |
-| Zod | Input validation |
-
-## ðŸš€ Getting Started
+## 🚀 Getting Started
 
 ```bash
 git clone https://github.com/KHALEDNOAMAN/Financial-Income-Tracker.git
 cd Financial-Income-Tracker/backend
-npm install
-cp .env.example .env
-npx knex migrate:latest
-npx knex seed:run
+npm install && cp .env.example .env
+npx knex migrate:latest && npx knex seed:run
 npm run dev
 ```
 
-## ðŸ“¡ API Endpoints
-
-### Income
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/income` | List income records (paginated, filterable) |
-| GET | `/api/income/:id` | Get income record details |
-| POST | `/api/income` | Record new income |
-| PUT | `/api/income/:id` | Update income record |
-
-### Accounts & Periods
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/accounts` | List chart of accounts |
-| GET | `/api/fiscal-periods` | List fiscal periods |
-| POST | `/api/fiscal-periods/:id/close` | Close a fiscal period |
-
-### Reports
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/reports/income-summary` | Income summary with totals |
-| GET | `/api/reports/by-category` | Income breakdown by category |
-| GET | `/api/reports/monthly-trend` | 12-month income trend |
-
-## ðŸ“ License
-
+## 📝 License
 MIT License - see [LICENSE](LICENSE) file.
 
 ---
-
-<div align="center">
-  Built with â¤ï¸ during internship at EduTech Yazilim A.S. - Istanbul, Turkey
-</div>
+<div align="center">Built with ❤️ during internship at EduTech Yazilim A.S. - Istanbul, Turkey</div>
